@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>fortune-cli 🎱 — Random fortunes, jokes, quotes & ASCII art</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .container { background: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 40px; max-width: 700px; width: 100%; }
+  h1 { font-size: 1.6rem; margin-bottom: 8px; color: #f0c674; }
+  .subtitle { color: #7d8590; font-size: 0.9rem; margin-bottom: 28px; }
+  .terminal { background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; min-height: 120px; position: relative; margin-bottom: 20px; }
+  .terminal::before { content: '● ● ●'; color: #7d8590; font-size: 0.7rem; letter-spacing: 4px; display: block; margin-bottom: 12px; }
+  .prompt { color: #3fb950; margin-bottom: 4px; }
+  .output { color: #e6edf3; white-space: pre-wrap; line-height: 1.6; }
+  .controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+  button { background: #21262d; border: 1px solid #30363d; border-radius: 8px; color: #e6edf3; padding: 8px 16px; font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer; transition: background 0.15s; }
+  button:hover { background: #30363d; }
+  button.active { background: #1f6feb; border-color: #1f6feb; }
+  .install { background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 16px; margin-top: 24px; }
+  .install code { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #3fb950; }
+  .install p { font-size: 0.8rem; color: #7d8590; margin-top: 8px; }
+  .links { display: flex; gap: 16px; margin-top: 16px; }
+  .links a { color: #58a6ff; text-decoration: none; font-size: 0.85rem; }
+  .links a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🎱 fortune-cli</h1>
+  <p class="subtitle">Random fortunes, jokes, quotes & ASCII art — right in your terminal</p>
+
+  <div class="terminal">
+    <div class="prompt">$ npx fortune-cli</div>
+    <div class="output" id="demo-output">Loading...</div>
+  </div>
+
+  <div class="controls">
+    <button onclick="show('fortune')" id="btn-fortune">🎱 Fortune</button>
+    <button onclick="show('joke')" id="btn-joke">😂 Joke</button>
+    <button onclick="show('quote')" id="btn-quote">💡 Quote</button>
+    <button onclick="show('ascii')" id="btn-ascii">🎨 ASCII Art</button>
+    <button onclick="show('random')" id="btn-random" class="active">🎲 Random</button>
+  </div>
+
+  <div class="install">
+    <code>npm install -g fortune-cli</code>
+    <p>Or run without installing: <code>npx fortune-cli</code></p>
+    <div class="links">
+      <a href="https://github.com/vexify-build/fortune-cli" target="_blank">📦 GitHub</a>
+      <a href="https://www.npmjs.com/package/fortune-cli" target="_blank">📎 npm</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const FORTUNES = [
+  "A beautiful journey awaits you — but first, coffee.",
+  "Your code will compile on the first try. Today is special.",
+  "Someone will thank you for a PR you wrote six months ago.",
+  "The bug you're looking for is in the comments you skipped.",
+  "Your git push --force fears are about to come true. Kidding.",
+  "Today you will accidentally delete production. Just kidding. Probably.",
+  "A new framework will announce itself. Resist it at your peril.",
+  "Your terminal theme is about to be the envy of your colleagues.",
+  "The answer you're looking for is one `console.log` away.",
+  "Stack Overflow has the answer. You just haven't found it yet.",
+];
+
+const JOKES = [
+  "Why do Java developers wear glasses? Because they can't C#.",
+  "A SQL query walks into a bar, walks up to two tables and asks: 'Can I join you?'",
+  "Why was the JavaScript developer sad? Because he didn't Node how to Express himself.",
+  "There are only two hard things in computer science: cache invalidation and naming things.",
+  "How many programmers does it take to change a light bulb? None — that's a hardware problem.",
+  "Why do programmers prefer dark mode? Because light attracts bugs.",
+  "A programmer's spouse: 'Talk to me!' — Programmer: 'SELECT * FROM spouse WHERE topic = ?'",
+  "I told my computer I needed a break. It hasn't sent me a notification since.",
+  "Why was the developer on vacation? Because he didn't C the point.",
+  "You know what the best thing about booleans is? Even if you're wrong, you're only off by a bit.",
+];
+
+const QUOTES = [
+  { text: "Debugging is twice as hard as writing the code in the first place.", author: "Brian Kernighan" },
+  { text: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.", author: "Martin Fowler" },
+  { text: "First, solve the problem. Then, write the code.", author: "John Johnson" },
+  { text: "Code is like humor. When you have to explain it, it's bad.", author: "Cory House" },
+  { text: "Simplicity is the soul of efficiency.", author: "Austin Freeman" },
+  { text: "The best error message is the one that never shows up.", author: "Thomas Fuchs" },
+  { text: "Make it work, make it right, make it fast.", author: "Kent Beck" },
+  { text: "Deleted code is debugged code.", author: "Jeff Sickel" },
+  { text: "Programming isn't about what you know; it's about what you can figure out.", author: "Chris Pine" },
+  { text: "The most important property of a program is whether it accomplishes the intention of its user.", author: "C.A.R. Hoare" },
+];
+
+const ASCII_ART = [
+  `\n   ██████╗ ██╗   ██╗███████╗███████╗███████╗\n  ██╔════╝ ██║   ██║██╔════╝██╔════╝██╔════╝\n  ██║  ███╗██║   ██║█████╗  ███████╗███████╗\n  ██║   ██║██║   ██║██╔══╝  ╚════██║╚════██║\n  ╚██████╔╝╚██████╔╝███████╗███████║███████║\n   ╚═════╝  ╚═════╝ ╚══════╝╚══════╝╚══════╝\n`,
+  `\n   ▓▓▓▓▓▓▓▓▓▓\n  ▓ Framework ▓  ← pick one, any one!\n   ▔▔▔▔▔▔▔▔▔▔\n`,
+  `\n    ┌──────────┐\n    │ 0  1  0  │  ← your code, probably\n    │ 1  0  1  │\n    │ 0  1  0  │\n    └──────────┘\n`,
+  `\n    /\\稽yx\n   /  \\  鱗 ?!\n  /    \\     ← me, trying to fix the bug\n /______\\\n`,
+];
+
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function show(type) {
+  const out = document.getElementById('demo-output');
+  document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  let content = '';
+  let activeBtn = '';
+
+  if (type === 'fortune' || type === 'random' && Math.random() < 0.25) {
+    content = '🎱 ' + pick(FORTUNES);
+    activeBtn = 'btn-fortune';
+  } else if (type === 'joke' || type === 'random' && Math.random() < 0.5) {
+    content = '😂 ' + pick(JOKES);
+    activeBtn = 'btn-joke';
+  } else if (type === 'quote' || type === 'random') {
+    const q = pick(QUOTES);
+    content = '💡 "' + q.text + '"\n     — ' + q.author;
+    activeBtn = 'btn-quote';
+  } else if (type === 'ascii') {
+    content = pick(ASCII_ART);
+    activeBtn = 'btn-ascii';
+  }
+
+  document.getElementById(activeBtn || 'btn-random').classList.add('active');
+  out.textContent = content;
+}
+
+show('random');
+</script>
+</body>
+</html>
