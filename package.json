@@ -1,0 +1,20 @@
+{
+  "name": "fortune-cli",
+  "version": "1.0.0",
+  "description": "A tiny CLI that spits out random fortunes, jokes, quotes, or ASCII art",
+  "main": "src/index.js",
+  "bin": {
+    "fortune": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": ["cli", "fortune", "jokes", "quotes", "ascii"],
+  "license": "MIT",
+  "dependencies": {
+    "cfonts": "^3.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
